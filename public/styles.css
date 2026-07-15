@@ -1,0 +1,229 @@
+:root {
+  --bs-body-bg: #fef9f0;
+  --bs-list-group-bg: transparent;
+}
+
+body {
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: 400;  
+}
+
+p, li, span, a {
+  font-family: "Josefin Sans", sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; 
+}
+
+main {
+  flex: 1;  /* this makes main grow and push footer to bottom */
+}
+
+/* Grand Hotel for brand and headings */
+.navbar-brand {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
+}
+
+/* Navbar links — readable font, NOT Grand Hotel */
+.navbar .nav-link {
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+/* ——— Page layout ——— */
+.page-container {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.page-heading {
+  color: #5a3e1b;
+  border-bottom: 1px solid #e0d0b8;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.page-subheading {
+  color: #a89070;
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ——— Column panel variants ——— */
+.panel {
+  border-radius: 0.375rem;
+  padding: 1rem;
+  height: 100%;
+  border: 1px solid #e0d0b8;
+}
+
+.panel-warm {
+  background: #f5ede0;
+}
+
+.panel-light {
+  background: #faf3e4;
+}
+
+.panel-feature {
+  background: linear-gradient(135deg, #f0e8d8 0%, #faf3e4 100%);
+  border-left: 4px solid #8B6914;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* ——— Panel heading ——— */
+.panel-title {
+  font-family: "Playfair Display", serif;
+  color: #5a3e1b;
+  border-bottom: 1px solid #e0d0b8;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ——— List items inside panels ——— */
+.panel-list-item {
+  border-bottom: 1px dashed #c9a96e;
+  color: #7a6652;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
+}
+
+.panel-list-item span.arrow {
+  color: #8B6914;
+  margin-right: 8px;
+}
+
+/* ——— Pull quote ——— */
+.pull-quote {
+  border-left: 4px solid #8B6914;
+  background: #f0e8d8;
+  font-style: italic;
+  color: #5a3e1b;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin: 1.5rem 0;
+}
+
+.pull-quote footer {
+  color: #a89070;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* ——— Image placeholder ——— */
+.img-placeholder {
+  background: #d9cfc4;
+  color: #7a6652;
+  font-size: 0.8rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130px;
+}
+
+/* ——— Shout out cards ——— */
+.shoutout-card {
+  background: #faf3e4;
+  border: 1px solid #e0d0b8;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.shoutout-name {
+  font-weight: 600;
+  color: #5a3e1b;
+  font-size: 0.9rem;
+}
+
+.shoutout-note {
+  font-size: 0.8rem;
+  color: #7a6652;
+  font-style: italic;
+}
+
+/* ——— Editor placeholder notes ——— */
+.editor-note {
+  font-size: 0.75rem;
+  color: #a89070;
+  font-style: italic;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+/* ——— Body text inside panels ——— */
+.panel-text {
+  color: #7a6652;
+  font-size: 0.95rem;
+}
+
+/* ——— Interview Q&A layout ——— */
+.interview-header {
+  max-width: 70%;
+  margin: 0 auto;
+}
+
+.interview-columns {
+  border-left: 1px solid #e0d0b8;
+  border-right: 1px solid #e0d0b8;
+}
+
+.qa-question {
+  font-weight: 700;
+  color: #5a3e1b;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.qa-block {
+  margin-bottom: 1rem;
+}
+
+/* ——— Continuation label ——— */
+.continuation-label {
+  border-bottom: 2px solid #8B6914;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.continuation-label span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8B6914;
+}
+
+/* ——— Newspaper column text ——— */
+.newspaper-columns {
+  column-count: 3;
+  column-gap: 1.25rem;
+  column-rule: 1px solid #e0d0b8;
+}
+
+@media (max-width: 768px) {
+  .newspaper-columns {
+    column-count: 1;
+  }
+}
+
+/* Footer links AND copyright — both Grand Hotel for consistency */
+footer .nav-link,
+footer p {
+  font-family: "Josefin Sans", sans-serif;
+  letter-spacing: 0.05em;
+}
+
