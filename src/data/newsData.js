@@ -1,3 +1,5 @@
+import { img } from '../utils/imagePath';
+
 // Reunion slideshow — first slide is intro text, rest are photos
 export const reunionSlides = [
   {

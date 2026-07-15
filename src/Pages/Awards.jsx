@@ -3,6 +3,8 @@ import React from "react";
 import AwardCard from '../components/AwardCard';
 import { featuredAwards, slideshowAwards } from '../data/awards';
 
+import { img } from '../utils/imagePath';
+
 function Awards() {
   return (
     <div className="container page-container">
@@ -67,7 +69,7 @@ function Awards() {
               [ Advert image ]
             </div>
             <p className="editor-note text-center mt-1">
-              [ add advert to /images/awards/norahad.jpg ]
+              [ add advert to /images/awards/norahad.jpeg ]
             </p>
           </div>
         </div>

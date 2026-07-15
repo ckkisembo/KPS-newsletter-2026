@@ -2,6 +2,7 @@ import React from "react";
 import Advert from '../components/Advert';
 import AchieverCard from '../components/AchieverCard';
 import { reunionSlides, memorialEntries, achievers } from '../data/newsData';
+import { img } from '../utils/imagePath';
 
 function News() {
   return (

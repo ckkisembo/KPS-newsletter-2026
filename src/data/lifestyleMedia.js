@@ -2,6 +2,8 @@
 // src: file path or URL — leave empty string while pending
 // caption: shown as overlay on real images, as placeholder text otherwise
 
+import { img } from '../utils/imagePath';
+
 const lifestyleMedia = [
   { id: 1, type: 'image', src: '/images/lifestyle/wellness1.jpg', caption: 'Wellness & Health' },
   { id: 2, type: 'image', src: '/images/lifestyle/activity_ladies.jpg', caption: 'Keeping Active' },
