@@ -11,19 +11,19 @@ export const reunionSlides = [
   {
     id: 2,
     type: 'image',
-    src: '/images/news/reunion1.jpg',
+    src: img('/images/news/reunion1.jpg'),
     caption: '[ caption ]',
   },
   {
     id: 3,
     type: 'image',
-    src: '/images/news/reunion2.jpg',
+    src: img('/images/news/reunion2.jpg'),
     caption: '[ caption ]',
   },
   {
     id: 4,
     type: 'image',
-    src: '/images/news/reunion3.jpg',
+    src: img('/images/news/reunion3.jpg'),
     caption: '[ caption ]',
   },
   // Add more reunion/meetup photos here
@@ -56,13 +56,13 @@ export const achievers = [
   {
     id: 1,
     name: '[ Achiever Name ]',
-    photo: '/images/news/achiever1.jpg',
+    photo: img('/images/news/achiever1.jpg'),
     caption: '[ Achievement description or title ]',
   },
   {
     id: 2,
     name: '[ Achiever Name ]',
-    photo: '/images/news/achiever2.jpg',
+    photo: img('/images/news/achiever2.jpg'),
     caption: '[ Achievement description or title ]',
   },
 ];

@@ -92,14 +92,14 @@ function SpinOffs() {
           </div>
 
           {/* Advert — image based */}
-          <Advert src="/images/spinoffs/mararead.jpg" path="/images/spinoffs/mararead.jpg" />
+          <Advert src={img("/images/spinoffs/mararead.jpg")} path="/images/spinoffs/mararead.jpg" />
         </div>
 
         {/* ——— COL 3: Advert + Ladies by Carol km ——— */}
         <div className="col-12 col-md-3 d-flex flex-column gap-3">
 
           {/* Advert — image based */}
-          <Advert src="/images/spinoffs/ishaaziad.jpg" path="/images/spinoffs/ishaaziad.jpg" />
+          <Advert src={img("/images/spinoffs/ishaaziad.jpg")} path="/images/spinoffs/ishaaziad.jpg" />
 
           {/* Ladies — by Carol km */}
           <div className="panel panel-light flex-grow-1">

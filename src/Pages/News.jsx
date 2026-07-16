@@ -161,7 +161,7 @@ function News() {
         <div className="col-12 col-md-2 d-flex flex-column gap-3">
 
           <Advert 
-            src="/images/news/bbbakery.mp4" 
+            src={img("/images/news/bbbakery.mp4")} 
             path="/images/news/bbbakery.mp4" 
             mediaType="video"
           />
@@ -227,7 +227,7 @@ function News() {
           </div>
 
           {/* Advert bottom */}
-          <Advert src="/images/news/sonnyad.jpg" path="/images/news/sonnyad.jpg" />
+          <Advert src={img("/images/news/sonnyad.jpg")} path="/images/news/sonnyad.jpg" />
         </div>
 
         {/* ——— COL 3: Ian Update + Carol's book launch ——— */}
