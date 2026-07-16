@@ -2,6 +2,7 @@ import React from "react";
 
 import AwardCard from '../components/AwardCard';
 import { featuredAwards, slideshowAwards } from '../data/awards';
+import { img } from '../utils/imagePath';
 
 import { img } from '../utils/imagePath';
 

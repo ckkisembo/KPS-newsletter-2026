@@ -1,6 +1,7 @@
 import React from 'react';
 import LifestyleMediaCarousel from '../components/LifestyleMediaCarousel';
 import lifestyleMedia from '../data/lifestyleMedia';
+import { img } from '../utils/imagePath';
 
 // KOMA's interview Q&A data
 const komaQA = [

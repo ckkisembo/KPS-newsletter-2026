@@ -1,5 +1,6 @@
 import React from "react";
 import Advert from '../components/Advert';
+import { img } from '../utils/imagePath';
 
 function SpinOffs() {
   return (
