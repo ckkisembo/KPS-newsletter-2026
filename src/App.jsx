@@ -10,6 +10,7 @@ import SpinOffs from "./Pages/SpinOffs";
 import LifeStyle from "./Pages/LifeStyle";
 import News from "./Pages/News";
 import Awards from "./Pages/Awards";
+import GlobalFootprints from './Pages/GlobalFootprints';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         if (currentPage === "LifeStyle") return <LifeStyle />;
         if (currentPage === "News") return <News />;
         if (currentPage === "Awards") return <Awards />;
+        if (currentPage === 'GlobalFootprints') return <GlobalFootprints />;
     }
 
     return (

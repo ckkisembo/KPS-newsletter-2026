@@ -4,6 +4,7 @@ const contents = [
   { id: 'LifeStyle',   label: 'LifeStyle',   desc: 'How best to live our lives after 50' },
   { id: 'News',        label: 'News',        desc: 'Update on how we are faring' },
   { id: 'Awards', label: 'Awards', desc: 'The scoreboard on how you all behaved this past year' },
+  { id: 'GlobalFootprints', label: 'Global Footprints', desc: 'Where in the world are we?' },
 ];
 
 export default contents;

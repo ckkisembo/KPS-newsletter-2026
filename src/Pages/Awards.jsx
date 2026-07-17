@@ -4,7 +4,7 @@ import AwardCard from '../components/AwardCard';
 import { featuredAwards, slideshowAwards } from '../data/awards';
 import { img } from '../utils/imagePath';
 
-import { img } from '../utils/imagePath';
+
 
 function Awards() {
   return (
@@ -54,7 +54,7 @@ function Awards() {
               Ad for Alumni Businesses
             </p>
             <img
-              src="/images/awards/norahad.jpeg"
+              src={img("/images/awards/norahad.jpeg")}
               alt="Advertisement"
               className="img-fluid rounded"
               style={{ width: '100%', objectFit: 'cover' }}
@@ -101,7 +101,7 @@ function Awards() {
               Ad for Alumni Businesses
             </p>
             <img
-              src="/images/awards/wendyad.jpg"
+              src={img("/images/awards/wendyad.jpg")}
               alt="Advertisement"
               className="img-fluid rounded"
               style={{ width: '100%', objectFit: 'cover' }}

@@ -158,7 +158,7 @@ function LifeStyle() {
             {/* Photo of Jessica pushed to bottom */}
             <div className="mt-auto">
               <img
-                src="/images/lifestyle/jessica.jpeg"
+                src={img("/images/lifestyle/jessica.jpeg")}
                 alt="Jessica"
                 className="img-fluid rounded mb-1"
                 style={{ width: '100%', objectFit: 'cover', maxHeight: '160px' }}
