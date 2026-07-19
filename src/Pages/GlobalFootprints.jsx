@@ -199,18 +199,24 @@ export default function GlobalFootprints() {
     );
   };
 
-  // Submit to Google Sheets
-  const handleSubmit = async () => {
-    if (!name.trim()) return;
-    if (!selectedCountry) return;
-    setStatus('loading');
-    try {
-      await fetch(SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ country: selectedCountry, name: name.trim() }),
-      });
+ // Submit via GET with URL parameters — more reliable than POST with no-cors
+const handleSubmit = async () => {
+  if (!name.trim()) return;
+  if (!selectedCountry) return;
+
+  setStatus('loading');
+
+  try {
+    const params = new URLSearchParams({
+      country: selectedCountry,
+      name: name.trim(),
+    });
+
+    const response = await fetch(`${SHEET_URL}?${params}`);
+    const result = await response.json();
+
+    if (result.success) {
+      // Update local state immediately
       const updated = { ...alumniData };
       if (!updated[selectedCountry]) updated[selectedCountry] = [];
       updated[selectedCountry] = [...updated[selectedCountry], name.trim()];
@@ -221,12 +227,22 @@ export default function GlobalFootprints() {
       });
       setName('');
       setStatus('success');
-      setTimeout(() => setStatus('idle'), 3000);
-    } catch {
+      setTimeout(() => setStatus('idle'), 4000);
+
+    } else if (result.reason === 'duplicate') {
+      setStatus('duplicate');
+      setTimeout(() => setStatus('idle'), 4000);
+
+    } else {
       setStatus('error');
-      setTimeout(() => setStatus('idle'), 3000);
+      setTimeout(() => setStatus('idle'), 4000);
     }
-  };
+
+  } catch {
+    setStatus('error');
+    setTimeout(() => setStatus('idle'), 4000);
+  }
+};
 
   const selectedAlumni = selectedCountry ? (alumniData[selectedCountry] || []) : [];
 
@@ -367,13 +383,31 @@ export default function GlobalFootprints() {
               {selectedCountry ? `Mark yourself in ${selectedCountry}` : 'Select a country first'}
             </h5>
 
+            {/* WhatsApp name rule note */}
+            <div
+              className="mb-3 p-2 rounded"
+              style={{
+                background: '#f0e8d8',
+                border: '1px solid #c9a96e',
+                fontSize: '0.8rem',
+                color: '#5a3e1b',
+              }}
+            >
+              <strong>Please use your WhatsApp name</strong> — the same one
+              you use on the KPS '80-86 alumni group. This keeps the map
+              accurate and avoids duplicates. If your name is already listed
+              for a country, try adding your surname initial
+              (e.g. <em>Caroline K</em>).
+            </div>
+
             {selectedCountry && selectedAlumni.length > 0 && (
               <div className="mb-3">
                 <p style={{ fontSize: '0.8rem', color: '#7a6652', marginBottom: '6px' }}>
                   Already here:
                 </p>
                 {selectedAlumni.map((n, i) => (
-                  <span key={i} className="alumni-name"
+                  <span
+                    key={i}
                     style={{
                       display: 'inline-block',
                       background: '#f0e8d8',
@@ -396,7 +430,7 @@ export default function GlobalFootprints() {
                 <input
                   type="text"
                   className="form-control mb-2"
-                  placeholder="Enter your name"
+                  placeholder="Your WhatsApp name"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSubmit()}
@@ -417,9 +451,18 @@ export default function GlobalFootprints() {
                 >
                   {status === 'loading' ? 'Adding...' : 'Add me to the map'}
                 </button>
+
+                {/* Status messages */}
                 {status === 'success' && (
                   <p style={{ color: '#0F6E56', fontSize: '0.85rem', marginTop: 8 }}>
-                    You are on the map! Welcome from {selectedCountry}.
+                    ✓ You are on the map! Welcome from {selectedCountry}.
+                  </p>
+                )}
+                {status === 'duplicate' && (
+                  <p style={{ color: '#993C1D', fontSize: '0.85rem', marginTop: 8 }}>
+                    That name is already listed for {selectedCountry}. 
+                    If there are multiple people with your name, try adding 
+                    your surname initial — e.g. <em>Caroline A</em>.
                   </p>
                 )}
                 {status === 'error' && (
