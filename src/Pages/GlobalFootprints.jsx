@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 
@@ -16,7 +16,7 @@ const CONTINENT_COLORS = {
 
 const COUNTRY_CONTINENT = {
   "004":"Asia","008":"Europe","012":"Africa","024":"Africa","032":"South America",
-  "036":"Oceania","040":"Europe","050":"Asia","056":"Europe","064":"Bhutan",
+  "036":"Oceania","040":"Europe","050":"Asia","056":"Europe","064":"Asia",
   "068":"South America","076":"South America","100":"Europe","104":"Asia",
   "116":"Asia","120":"Africa","124":"North America","140":"Africa","144":"Asia",
   "152":"South America","156":"Asia","170":"South America","174":"Africa",
@@ -33,7 +33,7 @@ const COUNTRY_CONTINENT = {
   "442":"Europe","450":"Africa","454":"Africa","458":"Asia","466":"Africa",
   "478":"Africa","484":"North America","496":"Asia","504":"Africa","508":"Africa",
   "516":"Africa","524":"Asia","528":"Europe","540":"Oceania","554":"Oceania",
-  "558":"North America","562":"Africa","566":"Nigeria","578":"Europe","586":"Asia",
+  "558":"North America","562":"Africa","566":"Africa","578":"Europe","586":"Asia",
   "591":"North America","598":"Oceania","600":"South America","604":"South America",
   "608":"Asia","616":"Europe","620":"Europe","624":"Africa","630":"North America",
   "634":"Asia","638":"Africa","642":"Europe","643":"Europe","646":"Africa",
@@ -91,8 +91,8 @@ export default function GlobalFootprints() {
   const [stats, setStats] = useState({ countries: 0, total: 0 });
   const [loading, setLoading] = useState(true);
 
-  // Put this above both useEffects
-  const fetchAlumniData = () => {
+  // ——— Single fetch function using useCallback so it is stable ———
+  const fetchAlumniData = useCallback(() => {
     setLoading(true);
     const url = `${SHEET_URL}?cache=${Date.now()}`;
     fetch(url, { method: 'GET', redirect: 'follow' })
@@ -113,97 +113,25 @@ export default function GlobalFootprints() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  };
+  }, []);
 
-  // First useEffect — load on mount
+  // ——— Load on mount ———
   useEffect(() => {
     fetchAlumniData();
-  }, []);
+  }, [fetchAlumniData]);
 
-  // Second useEffect — reload when user returns to page
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') fetchAlumniData();
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
-    return () => document.removeEventListener('visibilitychange', handleVisibility);
-  }, []);
-
-  useEffect(() => {
-  // Add timestamp to prevent browser caching the response
-  const url = `${SHEET_URL}?cache=${Date.now()}`;
-
-  fetch(url, {
-    method: 'GET',
-    redirect: 'follow',
-  })
-    .then(r => {
-      if (!r.ok) throw new Error('Network response was not ok');
-      return r.json();
-    })
-    .then(rows => {
-      // Handle case where sheet returns empty array
-      if (!Array.isArray(rows)) {
-        setLoading(false);
-        return;
-      }
-      const data = {};
-      rows.forEach(row => {
-        if (!row.country || !row.name) return;
-        if (!data[row.country]) data[row.country] = [];
-        // Avoid duplicates in local state
-        if (!data[row.country].includes(row.name)) {
-          data[row.country].push(row.name);
-        }
-      });
-      setAlumniData(data);
-      const total = Object.values(data)
-        .reduce((s, a) => s + a.length, 0);
-      setStats({
-        countries: Object.keys(data).length,
-        total,
-      });
-      setLoading(false);
-    })
-    .catch(err => {
-      console.error('Failed to load alumni data:', err);
-      setLoading(false);
-    });
-}, []);
-
-  // Reload fresh data whenever the user navigates back to this page
+  // ——— Reload when tab becomes visible again ———
   useEffect(() => {
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        setLoading(true);
-        const url = `${SHEET_URL}?cache=${Date.now()}`;
-        fetch(url, { method: 'GET', redirect: 'follow' })
-          .then(r => r.json())
-          .then(rows => {
-            if (!Array.isArray(rows)) { setLoading(false); return; }
-            const data = {};
-            rows.forEach(row => {
-              if (!row.country || !row.name) return;
-              if (!data[row.country]) data[row.country] = [];
-              if (!data[row.country].includes(row.name)) {
-                data[row.country].push(row.name);
-              }
-            });
-            setAlumniData(data);
-            const total = Object.values(data)
-              .reduce((s, a) => s + a.length, 0);
-            setStats({ countries: Object.keys(data).length, total });
-            setLoading(false);
-          })
-          .catch(() => setLoading(false));
+        fetchAlumniData();
       }
     };
-
     document.addEventListener('visibilitychange', handleVisibility);
     return () => document.removeEventListener('visibilitychange', handleVisibility);
-  }, []);
+  }, [fetchAlumniData]);
 
-  // Draw map
+  // ——— Draw map whenever alumniData changes ———
   useEffect(() => {
     if (!svgRef.current) return;
     const svgEl = d3.select(svgRef.current);
@@ -218,7 +146,6 @@ export default function GlobalFootprints() {
 
     const path = d3.geoPath().projection(projection);
 
-    // Zoom behaviour
     const zoom = d3.zoom()
       .scaleExtent([1, 8])
       .on('zoom', (event) => {
@@ -226,7 +153,6 @@ export default function GlobalFootprints() {
       });
 
     svgEl.call(zoom);
-
     const g = svgEl.append('g');
 
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
@@ -283,66 +209,59 @@ export default function GlobalFootprints() {
       });
   }, [alumniData]);
 
-  // Search handler
+  // ——— Search handler ———
   const handleSearch = (val) => {
     setSearch(val);
     if (val.length < 2) { setSearchResults([]); return; }
     setSearchResults(
-      ALL_COUNTRIES.filter(c => c.toLowerCase().includes(val.toLowerCase())).slice(0, 6)
+      ALL_COUNTRIES.filter(c =>
+        c.toLowerCase().includes(val.toLowerCase())
+      ).slice(0, 6)
     );
   };
 
- // Submit via GET with URL parameters — more reliable than POST with no-cors
-const handleSubmit = async () => {
-  if (!name.trim()) return;
-  if (!selectedCountry) return;
-
-  setStatus('loading');
-
-  try {
-    const params = new URLSearchParams({
-      country: selectedCountry,
-      name: name.trim(),
-    });
-
-    const response = await fetch(`${SHEET_URL}?${params}`);
-    const result = await response.json();
-
-    if (result.success) {
-      // Update local state immediately
-      const updated = { ...alumniData };
-      if (!updated[selectedCountry]) updated[selectedCountry] = [];
-      updated[selectedCountry] = [...updated[selectedCountry], name.trim()];
-      setAlumniData(updated);
-      setStats({
-        countries: Object.keys(updated).length,
-        total: Object.values(updated).reduce((s, a) => s + a.length, 0),
+  // ——— Submit handler ———
+  const handleSubmit = async () => {
+    if (!name.trim() || !selectedCountry) return;
+    setStatus('loading');
+    try {
+      const params = new URLSearchParams({
+        country: selectedCountry,
+        name: name.trim(),
       });
-      setName('');
-      setStatus('success');
-      setTimeout(() => setStatus('idle'), 4000);
+      const response = await fetch(`${SHEET_URL}?${params}`);
+      const result = await response.json();
 
-    } else if (result.reason === 'duplicate') {
-      setStatus('duplicate');
-      setTimeout(() => setStatus('idle'), 4000);
-
-    } else {
+      if (result.success) {
+        const updated = { ...alumniData };
+        if (!updated[selectedCountry]) updated[selectedCountry] = [];
+        updated[selectedCountry] = [...updated[selectedCountry], name.trim()];
+        setAlumniData(updated);
+        setStats({
+          countries: Object.keys(updated).length,
+          total: Object.values(updated).reduce((s, a) => s + a.length, 0),
+        });
+        setName('');
+        setStatus('success');
+        setTimeout(() => setStatus('idle'), 4000);
+      } else if (result.reason === 'duplicate') {
+        setStatus('duplicate');
+        setTimeout(() => setStatus('idle'), 4000);
+      } else {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 4000);
+      }
+    } catch {
       setStatus('error');
       setTimeout(() => setStatus('idle'), 4000);
     }
-
-  } catch {
-    setStatus('error');
-    setTimeout(() => setStatus('idle'), 4000);
-  }
-};
+  };
 
   const selectedAlumni = selectedCountry ? (alumniData[selectedCountry] || []) : [];
 
   return (
     <div className="container page-container">
 
-      {/* Heading */}
       <div className="row mb-4">
         <div className="col-12">
           <h2 className="page-heading">Global Footprints</h2>
@@ -352,7 +271,6 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      {/* Stats bar */}
       <div className="row mb-3">
         <div className="col-12">
           <div className="panel panel-feature">
@@ -367,14 +285,12 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      {/* Map */}
       <div className="row mb-3">
         <div className="col-12">
           <div
             className="panel panel-warm"
             style={{ padding: '0.5rem', position: 'relative', overflow: 'hidden' }}
           >
-            {/* Legend */}
             <div style={{
               display: 'flex', flexWrap: 'wrap', gap: '10px',
               padding: '0.5rem', fontSize: '11px', color: '#7a6652'
@@ -391,14 +307,12 @@ const handleSubmit = async () => {
               </span>
             </div>
 
-            {/* SVG map */}
             <div style={{ position: 'relative', width: '100%', overflowX: 'auto' }}>
               <svg
                 ref={svgRef}
                 viewBox="0 0 900 460"
                 style={{ width: '100%', height: 'auto', display: 'block' }}
               />
-              {/* Tooltip */}
               {tooltip.visible && (
                 <div style={{
                   position: 'absolute',
@@ -425,10 +339,8 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      {/* Search + Form */}
       <div className="row g-3 mb-4">
 
-        {/* Country search for mobile */}
         <div className="col-12 col-md-5">
           <div className="panel panel-light h-100">
             <h5 className="panel-title">Find your country</h5>
@@ -469,14 +381,12 @@ const handleSubmit = async () => {
           </div>
         </div>
 
-        {/* Add name form */}
         <div className="col-12 col-md-7">
           <div className="panel panel-warm h-100">
             <h5 className="panel-title">
               {selectedCountry ? `Mark yourself in ${selectedCountry}` : 'Select a country first'}
             </h5>
 
-            {/* WhatsApp name rule note */}
             <div
               className="mb-3 p-2 rounded"
               style={{
@@ -499,19 +409,16 @@ const handleSubmit = async () => {
                   Already here:
                 </p>
                 {selectedAlumni.map((n, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      display: 'inline-block',
-                      background: '#f0e8d8',
-                      border: '0.5px solid #c9a96e',
-                      borderRadius: 20,
-                      padding: '3px 10px',
-                      fontSize: 12,
-                      color: '#5a3e1b',
-                      margin: 3,
-                    }}
-                  >
+                  <span key={i} style={{
+                    display: 'inline-block',
+                    background: '#f0e8d8',
+                    border: '0.5px solid #c9a96e',
+                    borderRadius: 20,
+                    padding: '3px 10px',
+                    fontSize: 12,
+                    color: '#5a3e1b',
+                    margin: 3,
+                  }}>
                     {n}
                   </span>
                 ))}
@@ -545,7 +452,6 @@ const handleSubmit = async () => {
                   {status === 'loading' ? 'Adding...' : 'Add me to the map'}
                 </button>
 
-                {/* Status messages */}
                 {status === 'success' && (
                   <p style={{ color: '#0F6E56', fontSize: '0.85rem', marginTop: 8 }}>
                     ✓ You are on the map! Welcome from {selectedCountry}.
@@ -553,9 +459,8 @@ const handleSubmit = async () => {
                 )}
                 {status === 'duplicate' && (
                   <p style={{ color: '#993C1D', fontSize: '0.85rem', marginTop: 8 }}>
-                    That name is already listed for {selectedCountry}. 
-                    If there are multiple people with your name, try adding 
-                    your surname initial — e.g. <em>Caroline A</em>.
+                    That name is already listed for {selectedCountry}.
+                    Try adding your surname initial — e.g. <em>Caroline A</em>.
                   </p>
                 )}
                 {status === 'error' && (
@@ -574,7 +479,6 @@ const handleSubmit = async () => {
 
       </div>
 
-      {/* How it works */}
       <div className="row g-3">
         <div className="col-12 col-md-4">
           <div className="panel panel-light h-100 text-center">
@@ -590,7 +494,7 @@ const handleSubmit = async () => {
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✍️</div>
             <h6 className="panel-title" style={{ textAlign: 'center' }}>Step 2</h6>
             <p className="panel-text">
-              Type your name and press Enter or click Add me to the map.
+              Type your WhatsApp name and press Enter or click Add me to the map.
             </p>
           </div>
         </div>
