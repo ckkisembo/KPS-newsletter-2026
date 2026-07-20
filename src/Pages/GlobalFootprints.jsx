@@ -91,16 +91,21 @@ export default function GlobalFootprints() {
   const [stats, setStats] = useState({ countries: 0, total: 0 });
   const [loading, setLoading] = useState(true);
 
-  // Load alumni data from Google Sheets
-  useEffect(() => {
-    fetch(SHEET_URL)
+  // Put this above both useEffects
+  const fetchAlumniData = () => {
+    setLoading(true);
+    const url = `${SHEET_URL}?cache=${Date.now()}`;
+    fetch(url, { method: 'GET', redirect: 'follow' })
       .then(r => r.json())
       .then(rows => {
+        if (!Array.isArray(rows)) { setLoading(false); return; }
         const data = {};
         rows.forEach(row => {
           if (!row.country || !row.name) return;
           if (!data[row.country]) data[row.country] = [];
-          data[row.country].push(row.name);
+          if (!data[row.country].includes(row.name)) {
+            data[row.country].push(row.name);
+          }
         });
         setAlumniData(data);
         const total = Object.values(data).reduce((s, a) => s + a.length, 0);
@@ -108,6 +113,94 @@ export default function GlobalFootprints() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  };
+
+  // First useEffect — load on mount
+  useEffect(() => {
+    fetchAlumniData();
+  }, []);
+
+  // Second useEffect — reload when user returns to page
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') fetchAlumniData();
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, []);
+
+  useEffect(() => {
+  // Add timestamp to prevent browser caching the response
+  const url = `${SHEET_URL}?cache=${Date.now()}`;
+
+  fetch(url, {
+    method: 'GET',
+    redirect: 'follow',
+  })
+    .then(r => {
+      if (!r.ok) throw new Error('Network response was not ok');
+      return r.json();
+    })
+    .then(rows => {
+      // Handle case where sheet returns empty array
+      if (!Array.isArray(rows)) {
+        setLoading(false);
+        return;
+      }
+      const data = {};
+      rows.forEach(row => {
+        if (!row.country || !row.name) return;
+        if (!data[row.country]) data[row.country] = [];
+        // Avoid duplicates in local state
+        if (!data[row.country].includes(row.name)) {
+          data[row.country].push(row.name);
+        }
+      });
+      setAlumniData(data);
+      const total = Object.values(data)
+        .reduce((s, a) => s + a.length, 0);
+      setStats({
+        countries: Object.keys(data).length,
+        total,
+      });
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error('Failed to load alumni data:', err);
+      setLoading(false);
+    });
+}, []);
+
+  // Reload fresh data whenever the user navigates back to this page
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        setLoading(true);
+        const url = `${SHEET_URL}?cache=${Date.now()}`;
+        fetch(url, { method: 'GET', redirect: 'follow' })
+          .then(r => r.json())
+          .then(rows => {
+            if (!Array.isArray(rows)) { setLoading(false); return; }
+            const data = {};
+            rows.forEach(row => {
+              if (!row.country || !row.name) return;
+              if (!data[row.country]) data[row.country] = [];
+              if (!data[row.country].includes(row.name)) {
+                data[row.country].push(row.name);
+              }
+            });
+            setAlumniData(data);
+            const total = Object.values(data)
+              .reduce((s, a) => s + a.length, 0);
+            setStats({ countries: Object.keys(data).length, total });
+            setLoading(false);
+          })
+          .catch(() => setLoading(false));
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, []);
 
   // Draw map
@@ -397,7 +490,7 @@ const handleSubmit = async () => {
               you use on the KPS '80-86 alumni group. This keeps the map
               accurate and avoids duplicates. If your name is already listed
               for a country, try adding your surname initial
-              (e.g. <em>Caroline K</em>).
+              (e.g. <em>Dodovico M</em>).
             </div>
 
             {selectedCountry && selectedAlumni.length > 0 && (
