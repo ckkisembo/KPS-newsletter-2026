@@ -79,7 +79,7 @@ const NAME_MAP = {
 
 const ALL_COUNTRIES = Object.values(NAME_MAP).sort();
 
-export default function GlobalFootprints() {
+export default function GlobalFootprints({ currentPage }) {
   const svgRef = useRef(null);
   const [alumniData, setAlumniData] = useState({});
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -118,18 +118,7 @@ export default function GlobalFootprints() {
   // ——— Load on mount ———
   useEffect(() => {
     fetchAlumniData();
-  }, [fetchAlumniData]);
-
-  // ——— Reload when tab becomes visible again ———
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        fetchAlumniData();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
-    return () => document.removeEventListener('visibilitychange', handleVisibility);
-  }, [fetchAlumniData]);
+  }, [fetchAlumniData, currentPage]);
 
   // ——— Draw map whenever alumniData changes ———
   useEffect(() => {

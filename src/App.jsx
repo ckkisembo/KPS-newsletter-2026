@@ -23,7 +23,7 @@ function App() {
         if (currentPage === "LifeStyle") return <LifeStyle />;
         if (currentPage === "News") return <News />;
         if (currentPage === "Awards") return <Awards />;
-        if (currentPage === 'GlobalFootprints') return <GlobalFootprints />;
+        if (currentPage === 'GlobalFootprints') return <GlobalFootprints currentPage={ currentPage }/>;
     }
 
     return (
