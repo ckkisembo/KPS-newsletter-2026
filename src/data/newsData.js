@@ -33,15 +33,15 @@ export const reunionSlides = [
 export const memorialEntries = [
   {
     id: 1,
-    name: '[ Full Name ]',
-    relation: '[ e.g. Father of Kofi Mensah ]',
-    note: '[ Optional short remembrance line ]',
+    name: '[ Francis Xavier Rwego]',
+    relation: '[ Father of Leonard Rwego ]',
+    // note: '[ Optional short remembrance line ]',
   },
   {
     id: 2,
-    name: '[ Full Name ]',
-    relation: '[ e.g. Wife of James Adu ]',
-    note: '',
+    name: '[ AbWooli Elizabeth Kaijabwango ]',
+    relation: '[ Mother of Sylvia Kaijabwango ]',
+    // note: '',
   },
   {
     id: 3,
