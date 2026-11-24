@@ -214,6 +214,257 @@ h1, h2, h3, h4, h5, h6 {
   column-rule: 1px solid #e0d0b8;
 }
 
+/* ——— Add this to the bottom of public/styles.css ——— */
+
+/* ——— Kicker: small label above a headline ——— */
+.article-kicker {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #8B6914;
+  margin-bottom: 0.25rem;
+}
+
+/* ——— Tabs (companion articles) ——— */
+.article-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.25rem;
+  border-bottom: 1px solid #e0d0b8;
+}
+
+.article-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 0.375rem 0.375rem 0 0;
+  padding: 0.5rem 1rem;
+  margin-bottom: -1px;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a89070;
+  cursor: pointer;
+}
+
+.article-tab:hover {
+  color: #5a3e1b;
+}
+
+.article-tab.active {
+  background: #faf3e4;
+  border-color: #e0d0b8;
+  border-bottom: 1px solid #faf3e4;
+  color: #5a3e1b;
+}
+
+/* ——— Article headline and byline ——— */
+.article-title {
+  font-size: 2rem;
+  color: #5a3e1b;
+  margin-bottom: 0.25rem;
+}
+
+.article-byline {
+  font-style: italic;
+  color: #7a6652;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ——— Article text in newspaper columns ———
+   column-width lets the browser decide how many columns fit: 1 in a narrow slot, 3 when full width */
+.article-body {
+  column-width: 17rem;
+  column-gap: 2rem;
+  column-rule: 1px solid #e0d0b8;
+}
+
+.article-body p {
+  color: #5a4630;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  orphans: 3;
+  widows: 3;
+}
+
+/* Drop cap on the first paragraph */
+.article-body p:first-child::first-letter {
+  float: left;
+  font-family: "Playfair Display", serif;
+  font-size: 3.4rem;
+  line-height: 0.85;
+  padding: 0.2rem 0.5rem 0 0;
+  color: #8B6914;
+}
+
+/* Small diamond to mark the end of the article */
+.article-body p:last-child::after {
+  content: " ◆";
+  color: #8B6914;
+}
+
+/* ——— Author card ——— */
+.author-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #c9a96e;
+}
+
+.author-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c9a96e;
+  flex-shrink: 0;
+}
+
+.author-name {
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  color: #5a3e1b;
+  margin: 0;
+}
+
+.author-meta {
+  font-size: 0.8rem;
+  color: #7a6652;
+  margin: 0;
+}
+
+.author-meta a {
+  color: #8B6914;
+}
+
+.companion-link {
+  margin-left: auto;
+  background: #8B6914;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.companion-link:hover {
+  background: #6d5210;
+}
+
+/* ——— Spotlight (Q&A feature) ——— */
+.spotlight-headline {
+  font-size: 1.4rem;
+  color: #5a3e1b;
+  margin-bottom: 1rem;
+}
+
+/* Photos show at their natural shape, so nothing gets cropped */
+.spotlight-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+}
+
+/* The grey placeholder (shown only if a photo file is missing) */
+.img-placeholder.spotlight-photo {
+  display: flex;
+  aspect-ratio: 4 / 3;
+}
+
+.spotlight-columns {
+  column-width: 16rem;
+  column-gap: 1.75rem;
+  column-rule: 1px solid #e0d0b8;
+}
+
+/* Keep each question together with its answer */
+.spotlight-columns .qa-block {
+  break-inside: avoid;
+}
+
+/* ——— Author photo placeholder (shown until a photo is added) ——— */
+.author-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d9cfc4;
+  color: #7a6652;
+  font-size: 0.6rem;
+}
+
+/* ——— Column holding the golf photos (no box: the photos sit straight on the page) ——— */
+.photo-column {
+  height: 100%;
+}
+
+/* sticky: the photos stay in view as you scroll past the long columns beside them */
+.photo-sticky {
+  position: sticky;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* On tablets the photos sit side by side instead of stacking full width */
+@media (max-width: 991.98px) {
+  .photo-sticky {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .photo-sticky > div {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+/* On phones they stack again */
+@media (max-width: 575.98px) {
+  .photo-sticky { flex-direction: column; }
+}
+
+/* ——— Golf interview panel: the author card sits at the bottom of the column ——— */
+.spotlight-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.spotlight-panel .spotlight-columns {
+  margin-bottom: 1.5rem;
+}
+
+/* Interview text set at the same comfortable reading size as the articles */
+.spotlight-panel .panel-text {
+  color: #5a4630;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.spotlight-panel .qa-question {
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.spotlight-panel .qa-block {
+  margin-bottom: 1.4rem;
+}
+
+.spotlight-panel .author-card {
+  margin-top: auto;
+}
+
 @media (max-width: 768px) {
   .newspaper-columns {
     column-count: 1;

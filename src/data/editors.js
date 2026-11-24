@@ -8,7 +8,7 @@ const editors = [
     {id: 5, name: "Caroline Kisembo", role:"Contributing Editor", photo: img("/images/editors/carolkk.png")},
     {id: 6, name: "Titus Bitebekezi", role:"Contributing Editor", photo: img("/images/editors/titus.png")},
     {id: 7, name: "Robert Komakech", role:"Contributing Editor", photo: img("/images/editors/rkomakech.png")},
-    {id: 8, name: "James Tamale", role:"Contributing Editor", photo: img("/images/editors/.png")}
+    {id: 8, name: "James Tamale", role:"Contributing Editor", photo: img("/images/editors/jtamale.png")}
 ]
 
 export default editors;

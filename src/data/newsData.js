@@ -11,22 +11,46 @@ export const reunionSlides = [
   {
     id: 2,
     type: 'image',
-    src: img('/images/news/reunion1.jpg'),
-    caption: '[ caption ]',
+    src: img('/images/reunion/hanging_out.png'),
+    caption: '[ night on the town ]',
   },
   {
     id: 3,
     type: 'image',
-    src: img('/images/news/reunion2.jpg'),
-    caption: '[ caption ]',
+    src: img('/images/reunion/catchingup.png'),
+    caption: '[ catching up ]',
   },
   {
     id: 4,
     type: 'image',
-    src: img('/images/news/reunion3.jpg'),
-    caption: '[ caption ]',
+    src: img('/images/reunion/chance_meetups.png'),
+    caption: '[ unplanned encounters ]',
+  },
+  {
+    id: 5,
+    type: 'image',
+    src: img('/images/reunion/ladies_meetup_3.jpg'),
+    caption: '[ mini ladies reunion ]',
+  },
+  {
+    id: 6,
+    type: 'image',
+    src: img('/images/reunion/ishaazi_meetups.png'),
+    caption: '[ ishaazi meetups ]',
   },
   // Add more reunion/meetup photos here
+  {
+    id: 7,
+    type: 'image',
+    src: img('/images/reunion/bse_why_not.png'),
+    caption: '[ just because ]',
+  },
+  {
+    id: 8,
+    type: 'image',
+    src: img('/images/reunion/annet_barbs.jpg'),
+    caption: '[ birthday things ]',
+  },
 ];
 
 // Memorial — names and relation to alumni member

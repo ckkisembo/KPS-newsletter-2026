@@ -1,6 +1,9 @@
 import React from 'react';
-import LifestyleMediaCarousel from '../components/LifestyleMediaCarousel';
-import lifestyleMedia from '../data/lifestyleMedia';
+import ArticleTabs from '../components/ArticleTabs';
+import Spotlight from '../components/Spotlight';
+import SpotlightPhotos from '../components/SpotlightPhotos';
+import spotlight from '../data/spotlight';
+import { articles, author } from '../data/articles';
 import { img } from '../utils/imagePath';
 
 // KOMA's interview Q&A data
@@ -185,68 +188,16 @@ function LifeStyle() {
         </div>
       </div>
 
-      {/* ——— BOTTOM SECTION: Wellness | Media Carousel | Golfers ——— */}
+      {/* ——— BOTTOM SECTION ——— */}
       <div className="row g-3">
-
-        {/* LEFT — Wellness, Health & Activity */}
-        <div className="col-12 col-md-3">
-          <div className="panel panel-light h-100">
-            <h5 className="panel-title">Wellness, Health & Activity</h5>
-            <p className="panel-text fst-italic" style={{ fontSize: '0.85rem' }}>
-              Taking care of ourselves — mind, body and spirit.
-            </p>
-            <p className="panel-text">
-              [ Carol km: opening paragraph on wellness and health
-              activities the group has been engaged in this year. ]
-            </p>
-            <p className="panel-text">
-              [ Dr. Albert: second paragraph — tips and other
-              useful information for healthy living after 50. ]
-            </p>
-            <p className="panel-text">
-              [ Martha / Carol km: third paragraph — group activities,
-              routines, or initiatives worth highlighting. ]
-            </p>
-            <p className="editor-note">
-              [ awaiting input from Carol km, Dr. Albert and Liz ]
-            </p>
-          </div>
+        <div className="col-12 col-lg-6">
+          <ArticleTabs articles={articles} author={author} />
         </div>
-
-        {/* CENTRE — Unified media carousel */}
-        <div className="col-12 col-md-6">
-          <div className="panel panel-warm h-100">
-            <h5 className="panel-title text-center">Photos & Video</h5>
-            <LifestyleMediaCarousel slides={lifestyleMedia} />
-            <p className="editor-note text-center mt-2">
-              [ add photo paths and video to lifestyleMedia.js when ready ]
-            </p>
-          </div>
+        <div className="col-12 col-lg-3">
+          <SpotlightPhotos data={spotlight} />
         </div>
-
-        {/* RIGHT — The Golfers */}
-        <div className="col-12 col-md-3">
-          <div className="panel panel-light h-100">
-            <h5 className="panel-title">⛳ The Golfers</h5>
-            <p className="panel-text fst-italic" style={{ fontSize: '0.85rem' }}>
-              Our classmates on the green — stories from the fairway.
-            </p>
-            <p className="panel-text">
-              [ Charles: paragraph on the golf meetups —
-              where, when, who showed up. ]
-            </p>
-            <p className="panel-text">
-              [ Charles: reflections on the experience on the
-              green — memorable moments, friendly competition. ]
-            </p>
-            <p className="panel-text">
-              [ ???: any other golfer contributions
-              or notable rounds to mention. ]
-            </p>
-            <p className="editor-note">
-              [ awaiting input from Charles and the golfers ]
-            </p>
-          </div>
+        <div className="col-12 col-lg-3">
+          <Spotlight data={spotlight} />
         </div>
       </div>
     </div>
