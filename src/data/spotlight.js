@@ -7,15 +7,15 @@ const spotlight = {
   kicker: 'Alumni Spotlight',
   headline: 'Meet Martha Kaganzi, Our Newest Golf Enthusiast',
   photos: [
-    { src: img('/images/lifestyle/golfers/martha_golf_1.jpg'), alt: 'A golfer at the top of her swing on the tee', caption: 'Martha Swings' },
-    { src: img('/images/lifestyle/golfers/martha_golf_2.jpg'), alt: 'Three women golfers posing together on the course', caption: 'Lady Golfers' },
+    { src: img('/images/lifestyle/ck_mk_1.jpg'), alt: 'A golfer at the top of her swing on the tee', caption: '' },
+    { src: img('/images/lifestyle/ck_mk_2.jpg'), alt: 'Three women golfers posing together on the course', caption: '' },
   ],
   // Who wrote or conducted the interview. Fill these in and drop the photo into
   // public/images/lifestyle/ (while name/photo are empty, a placeholder card shows).
   author: {
-    name: 'Charles Kazuka',
-    role: 'Interviewer',
-    photo: 'img("/images/lifestyle/golfers/author_golf")',   // e.g. img('/images/lifestyle/author-golf.jpg')
+    name: '',
+    role: '',
+    photo: '',   // e.g. img('/images/lifestyle/author-golf.jpg')
   },
   // Optional pull quote — taken word for word from Martha's answer to the advice question.
   // Delete the whole pullQuote line to remove it.
